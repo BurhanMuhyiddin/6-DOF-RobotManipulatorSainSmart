@@ -1,0 +1,32 @@
+mrm_description:
+
+#Publish all joint states
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish rate: 50
+
+  #Position controllers
+  base_waist_joint_position_controller:
+    type: position_controllers/JointPositionController
+    joint: base_waist
+    pid: {p: 3.0, i: 1.0, d: 1.0}
+
+  waist_forearm_joint_position_controller:
+    type: position_controllers/JointPositionController
+    joint: waist_forearm
+    pid: {p: 3.0, i: 1.0, d: 1.0} 
+
+  forearm_forearmRotation_joint_position_controller:
+    type: position_controllers/JointPositionController
+    joint: forearm_forearmRotation
+    pid: {p: 3.0, i: 1.0, d: 1.0} 
+
+  forearmRotation_wrist_joint_position_controller:
+    type: position_controllers/JointPositionController
+    joint: forearmRotation_wrist
+    pid: {p: 3.0, i: 1.0, d: 1.0}
+
+  wrist_wristRotation_joint_position_controller:
+    type: position_controllers/JointPositionController
+    joint: wrist_wristRotation
+    pid: {p: 3.0, i: 1.0, d: 1.0}

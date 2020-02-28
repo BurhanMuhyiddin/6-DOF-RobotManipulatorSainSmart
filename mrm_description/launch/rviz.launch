@@ -1,0 +1,24 @@
+<launch>
+
+    <rosparam file="$(find mrm_description)/config/robotManipulator_control.yaml" command="load"/>
+    
+    <arg name="model" default="$(find mrm_description)/urdf/mrm.xacro"/>
+    <arg name="gui" default="true" />
+    
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+    <param name="use_gui" value="$(arg gui)"/>
+
+    <node name="robot_hardware_interface" pkg="mrm_description" type="robot_hardware_interface" output="screen"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mrm_description)/launch/config.rviz"/>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output = "screen" args="
+                            /mrm_description/base_waist_joint_position_controller
+                            /mrm_description/waist_forearm_joint_position_controller
+                            /mrm_description/forearm_forearmRotation_joint_position_controller
+                            /mrm_description/forearmRotation_wrist_joint_position_controller
+                            /mrm_description/wrist_wristRotation_joint_position_controller"
+                            />
+
+</launch>

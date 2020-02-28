@@ -1,0 +1,149 @@
+<?xml version="1.0" ?>
+
+<robot name="mrm_description" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <link name="base">
+        <visual>
+            <geometry>
+                <box size="0.2 0.2 0.02"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="base_waist" type="revolute">
+        <axis xyz="0 0 1"/>
+        <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
+        <origin xyz="0.0 0.0 0.01" rpy="0.0 0.0 0.0"/>
+        <parent link="base"/>
+        <child link="waist"/>
+    </joint>
+
+    <transmission name="trans1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="base_waist">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="servo1">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <link name="waist">
+        <visual>
+            <origin xyz="0.0 0.0 0.0495" rpy="0.0 0.0 0.0"/>       
+            <geometry>
+                <cylinder radius="0.075" length="0.099"/>
+                <!--<box size="0.2 0.2 0.02"/>-->
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="waist_forearm" type="revolute">
+        <axis xyz="1 0.0 0.0"/>
+        <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
+        <origin xyz="0.0 0.0 0.099" rpy="0.0 0.0 0.0"/>
+        <parent link="waist"/>
+        <child link="forearm"/>
+    </joint>
+
+    <transmission name="trans2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="waist_forearm">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="servo2">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <link name="forearm">
+        <visual>
+            <origin xyz="0.0 0.0 0.06" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.065" length="0.120"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="forearm_forearmRotation" type="revolute">
+        <axis xyz="1 0.0 0.0"/>
+        <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
+        <origin xyz="0.0 0.0 0.120" rpy="0.0 0.0 0.0"/>
+        <parent link="forearm"/>
+        <child link="forearm_rotation"/>
+    </joint>
+
+    <transmission name="trans3">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="forearm_forearmRotation">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="servo3">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <link name="forearm_rotation">
+        <visual>
+            <origin xyz="0.0 0.0 0.02" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.055" length="0.04"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="forearmRotation_wrist" type="revolute">
+        <axis xyz="1 0 0"/>
+        <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
+        <origin xyz="0.0 0.0 0.04" rpy="0.0 0.0 0.0"/>
+        <parent link="forearm_rotation"/>
+        <child link="wrist"/>
+    </joint>
+
+    <transmission name="trans4">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="forearmRotation_wrist">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="servo4">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <link name="wrist">
+        <visual>
+            <origin xyz="0.0 0.0 0.0975" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder radius="0.045" length="0.195"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <joint name="wrist_wristRotation" type="revolute">
+        <axis xyz="0.0 0.0 1"/>
+        <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
+        <origin xyz="0.0 0.0 0.195" rpy="0.0 0.0 0.0"/>
+        <parent link="wrist"/>
+        <child link="wrist_rotation"/>
+    </joint>
+
+    <transmission name="trans5">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="wrist_wristRotation">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="servo5">
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <link name="wrist_rotation">
+
+    </link>
+
+</robot>
