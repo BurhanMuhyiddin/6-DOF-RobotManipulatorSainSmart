@@ -3,7 +3,7 @@ mrm_description:
 #Publish all joint states
   joint_state_controller:
     type: joint_state_controller/JointStateController
-    publish rate: 50
+    publish_rate: 50
 
   #Position controllers
   base_waist_joint_position_controller:

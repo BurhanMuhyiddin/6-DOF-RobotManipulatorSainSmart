@@ -14,6 +14,7 @@
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output = "screen" args="
+                            /mrm_description/joint_state_controller
                             /mrm_description/base_waist_joint_position_controller
                             /mrm_description/waist_forearm_joint_position_controller
                             /mrm_description/forearm_forearmRotation_joint_position_controller
