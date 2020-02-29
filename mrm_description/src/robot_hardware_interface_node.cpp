@@ -21,10 +21,10 @@ void MyRobot::init(){
 
     for (int i = 0; i < num_joints_; i++)
     {
-        hardware_interface::JointStateHandle joint_state_handle(joint_names_[i], &pos[0], &vel[0], &eff[0]);
+        hardware_interface::JointStateHandle joint_state_handle(joint_names_[i], &pos[i], &vel[i], &eff[i]);
         jnt_state_interface.registerHandle(joint_state_handle);
 
-        hardware_interface::JointHandle joint_pos_handle(jnt_state_interface.getHandle(joint_names_[i]), &cmd[0]);
+        hardware_interface::JointHandle joint_pos_handle(jnt_state_interface.getHandle(joint_names_[i]), &cmd[i]);
         jnt_pos_interface.registerHandle(joint_pos_handle);
     }
 
@@ -53,8 +53,8 @@ void MyRobot::read() {
         pos[3]=angles::from_degrees(joint_read.response.res[3]-90);
         pos[4]=angles::from_degrees(joint_read.response.res[4]-90);
 		
-		ROS_INFO("Receiving  j1: %.2f, j2: %.2f, j3: %.2f",joint_read.response.res[0],joint_read.response.res[1], joint_read.response.res[2]);
-		
+		ROS_INFO("Receiving  j1: %.2f, j2: %.2f, j3: %.2f, j4: %.2f, j5: %.2f",joint_read.response.res[0],joint_read.response.res[1], joint_read.response.res[2], joint_read.response.res[3], joint_read.response.res[4]);
+		ROS_INFO("%.2f  %.2f  %.2f  %.2f  %.2f", pos[0], pos[1], pos[2], pos[3], pos[4]);
 	}	
     else
     {
@@ -73,8 +73,8 @@ int main(int argc, char** argv)
     ROS_INFO("Hello ");
     ros::init(argc, argv, "robot_hardware_interface");
     ros::NodeHandle nh;
-    //ros::AsyncSpinner spinner(2);
-    //spinner.start();
+    ros::AsyncSpinner spinner(2);
+    spinner.start();
     MyRobot my_robot(nh);
     ros::spin();
 
