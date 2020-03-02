@@ -96,7 +96,7 @@
     </link>
 
     <joint name="forearmRotation_wrist" type="revolute">
-        <axis xyz="1 0 0"/>
+        <axis xyz="0 0 1"/>
         <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
         <origin xyz="0.0 0.0 0.04" rpy="0.0 0.0 0.0"/>
         <parent link="forearm_rotation"/>
@@ -124,7 +124,7 @@
     </link>
 
     <joint name="wrist_wristRotation" type="revolute">
-        <axis xyz="0.0 0.0 1"/>
+        <axis xyz="1 0.0 0"/>
         <limit lower="-1.5708" upper="1.5708" effort="1000.0" velocity="0.5"/>
         <origin xyz="0.0 0.0 0.195" rpy="0.0 0.0 0.0"/>
         <parent link="wrist"/>

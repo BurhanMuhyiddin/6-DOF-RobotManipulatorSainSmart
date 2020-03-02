@@ -7,6 +7,7 @@
 #include <rospy_tutorials/Floats.h>
 #include <mrm_description/Floats_array.h>
 #include <angles/angles.h>
+#include <sensor_msgs/JointState.h>
 
 class MyRobot : public hardware_interface::RobotHW
 {
@@ -14,7 +15,7 @@ public:
   MyRobot(ros::NodeHandle& nh);
   void init();
   void update(const ros::TimerEvent& e);
-  void read();
+  void read(const sensor_msgs::JointState::ConstPtr& msg);
   void write(ros::Duration elapsed_time);
   ros::Publisher pub;
   ros::ServiceClient client;
