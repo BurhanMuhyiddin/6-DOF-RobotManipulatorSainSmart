@@ -6,7 +6,8 @@ MyRobot::MyRobot(ros::NodeHandle& nh) : nh_(nh){
     loop_hz_=4;
     ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
 
-    client = nh_.serviceClient<mrm_description::Floats_array>("/read_joint_state");
+    pub = nh_.advertise<rospy_tutorials::Floats>("/joints_to_aurdino",10);
+    //client = nh_.serviceClient<mrm_description::Floats_array>("/read_joint_state");
 
     non_realtime_loop_ = nh_.createTimer(update_freq, &MyRobot::update, this);
 }
@@ -33,50 +34,38 @@ void MyRobot::init(){
     
 }
 
-void MyRobot::update(const ros::TimerEvent& e) {
-    elapsed_time_ = ros::Duration(e.current_real - e.last_real);
-    read();
-    controller_manager_->update(ros::Time::now(), elapsed_time_);
-    //write(elapsed_time_);
+void MyRobot::read(const sensor_msgs::JointState::ConstPtr& msg) {
+    double pst0 = msg->position[0];
+    double pst1 = msg->position[1];
+    double pst2 = msg->position[2];
+    double pst3 = msg->position[3];
+    double pst4 = msg->position[4];
+
+    pos[0]=angles::from_degrees(pst0-90.0);
+    pos[1]=angles::from_degrees(90.0-pst1);
+    pos[2]=angles::from_degrees(pst2);
+    pos[3]=angles::from_degrees(pst3-90.0);
+    pos[4]=angles::from_degrees(90.0-pst4);
+
+    joints_pub.data.clear();
+	joints_pub.data.push_back(pst0);
+	joints_pub.data.push_back(pst1);
+	joints_pub.data.push_back(pst2);
+    joints_pub.data.push_back(pst3);
+	joints_pub.data.push_back(pst4);
+    pub.publish(joints_pub);
 }
 
-void MyRobot::read() {
-
-	joint_read.request.req=1.0;
-	
-	if(client.call(joint_read))
-	{
-	    
-		pos[0]=angles::from_degrees(90-joint_read.response.res[0]);
-		pos[1]=angles::from_degrees(joint_read.response.res[1]-90);
-		pos[2]=angles::from_degrees(joint_read.response.res[2]-90);
-        pos[3]=angles::from_degrees(joint_read.response.res[3]-90);
-        pos[4]=angles::from_degrees(joint_read.response.res[4]-90);
-		
-		ROS_INFO("Receiving  j1: %.2f, j2: %.2f, j3: %.2f, j4: %.2f, j5: %.2f",joint_read.response.res[0],joint_read.response.res[1], joint_read.response.res[2], joint_read.response.res[3], joint_read.response.res[4]);
-		ROS_INFO("%.2f  %.2f  %.2f  %.2f  %.2f", pos[0], pos[1], pos[2], pos[3], pos[4]);
-	}	
-    else
-    {
-    	pos[0]=0;
-        pos[1]=0;
-        pos[2]=0;
-        pos[3]=0;
-        pos[4]=0;
-        ROS_INFO("Service not found ");
-    }   
-
-}
 
 int main(int argc, char** argv)
 {
-    ROS_INFO("Hello ");
     ros::init(argc, argv, "robot_hardware_interface");
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2);
     spinner.start();
     MyRobot my_robot(nh);
-    ros::spin();
+    ros::Subscriber sub = nh.subscribe("/joint_state_commands_", 1000, &MyRobot::read, &my_robot);
+    ros::waitForShutdown();
 
     //while(1);
     /*while (true)
